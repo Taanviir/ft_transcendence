@@ -20,12 +20,14 @@ from django.urls import path, include
 from django.conf.urls.static import static
 
 from . import settings
+from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("pages.urls")),
     path("users/", include("users.urls")),
     path("pong/", include("pong.urls")),
+    path("health/", views.health_check),
 ]
 
 if settings.DEBUG:

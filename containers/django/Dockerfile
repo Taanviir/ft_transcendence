@@ -10,7 +10,8 @@ COPY requirements.txt ./tools/entrypoint.sh ./
 
 EXPOSE 8000
 
-RUN pip install --root-user-action=ignore -r requirements.txt --no-cache-dir && chmod +x ./entrypoint.sh
+RUN pip install --root-user-action=ignore -r requirements.txt --no-cache-dir \
+    && chmod +x ./entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
 
