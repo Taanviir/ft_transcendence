@@ -31,15 +31,15 @@
             </div>
 
             <div class="row">
-                <button type="button" class="btn btn-light fa fa-eye-slash" data-toggle="tooltip" data-placement="top"
-                    title="Visual Impaired Mode" onclick="visual()">
+                <button id="visualModeButton" type="button" class="btn btn-light fa fa-eye-slash" data-toggle="tooltip"
+                    data-placement="top" title="Visual Impaired Mode">
                 </button>
             </div>
 
             <div class="row">
                 <div id="3rdplayer" class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                    <button type="button" class="btn btn-danger">&uarr; D</button>
-                    <button type="button" class="btn btn-danger">&darr; C</button>
+                    <button type="button" class="btn btn-accent">&uarr; D</button>
+                    <button type="button" class="btn btn-accent">&darr; C</button>
                 </div>
                 <div class="row">
                     <p id="player3name"></p>
@@ -49,7 +49,7 @@
 
         <div class="col-10">
             <div class="canvas-container">
-                <canvas id="ponggame">Pong Game</canvas>
+                <canvas id="pongGame">Pong Game</canvas>
             </div>
         </div>
 
@@ -78,8 +78,8 @@
 
             <div class="row">
                 <div id="4thplayer" class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                    <button type="button" class="btn btn-danger">&uarr; J</button>
-                    <button type="button" class="btn btn-danger">&darr; N</button>
+                    <button type="button" class="btn btn-accent">&uarr; J</button>
+                    <button type="button" class="btn btn-accent">&darr; N</button>
                 </div>
                 <div class="row">
                     <p id="player4name"></p>
@@ -91,7 +91,7 @@
 
 <!-- Visual Imp Mode Modal -->
 <div id="visualmodal" class="modal fade" data-bs-theme="dark" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title" id="staticBackdropLabel">Warning!</h1>
@@ -107,7 +107,7 @@
 <!-- Modal Winner Pop-up-->
 <div id="winnerpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Pong Game</h1>
@@ -117,7 +117,7 @@
                 <h2 id="winner"></h2>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="playAgain()">Play
+                <button id="playAgainButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Play
                     Again!</button>
                 <a href="{% url 'home' %}" class="btn btn-secondary spa-link" data-toggle="tooltip" data-placement="top"
                     title="Back to Home" data-method="GET" data-bs-dismiss="modal">Back to Home</a>
@@ -129,7 +129,7 @@
 <!-- Modal Tounament Winner Pop-up-->
 <div id="winnerTpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title" id="staticBackdropLabel">Pong Game</h1>
@@ -139,8 +139,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-dark-orange" data-bs-dismiss="modal"
-                    onclick="nextGame()">Next
-                    Match!</button>
+                    onclick="nextGame()">Next Match!</button>
                 <button type="button" class="btn btn-secondary btn-dark-orange">Back to Home Page</button>
             </div>
         </div>
@@ -150,7 +149,7 @@
 <!-- Modal Tounament FINAL Winner Pop-up-->
 <div id="winnerFinalpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="background-color: #fec66b;">
             <div class="modal-header">
                 <h1 class="modal-title handjet-font" id="staticBackdropLabel">Pong Game</h1>
@@ -169,60 +168,52 @@
 <div id="configModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="max-height: 90vh; height: auto;">
-            <div class="modal-header">
-                <h1 id="staticBackdropLabel" class="modal-title fs-5">Pong Configurations
-                </h1>
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h1 id="staticBackdropLabel" class="modal-title fs-4">Pong Configurations</h1>
             </div>
             <div class="modal-body">
                 <form>
-                    <!-- Sound switch -->
-                    <div class="mb-3 mt-4">
-                        <div class="switch-container">
-                            <label class="switch-label" for="customSwitch">Sound</label>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="customSwitch" checked>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3 mt-4">
-                        <!-- Mode (level) button -->
-                        <div class="btn-group">
-                            <button class="btn btn-secondary btn-dark-orange btn-lg dropdown-toggle" type="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Mode
+                    <!-- Mode (level) button -->
+                    <div class="col">
+                        <label for="difficultyDropdown">Difficulty*</label>
+                        <div class="dropdown">
+                            <!-- Dropdown will default to Medium -->
+                            <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                                id="difficultyDropdown">
+                                Medium
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">Easy</a></li>
-                                <li><a class="dropdown-item active" href="#">Medium</a></li>
+                                <li><a class="dropdown-item" href="#">Medium</a></li>
                                 <li><a class="dropdown-item" href="#">Hard</a></li>
-                                <hr class="dropdown-divider">
                                 <li><a class="dropdown-item" href="#">Custom</a></li>
                             </ul>
                         </div>
+                    </div>
 
-                        <!-- Custom Configuration (hidden by default) -->
-                        <div id="customConfig" class="mb-3 mt-4" style="display: none;">
-                            <div>
-                                <label for="ballspeed" class="form-label">Ball Speed</label>
-                                <input type="range" class="form-range" id="ballspeed" min="5" max="40" step="1">
-                            </div>
-                            <div>
-                                <label for="playerspeed" class="form-label">Paddle Speed</label>
-                                <input type="range" class="form-range" id="playerspeed" min="5" max="60" step="1">
-                            </div>
-                        </div>
-
+                    <!-- Custom Configuration (hidden by default) -->
+                    <div id="customConfig" class="mb-3 mt-4" style="display: none;">
                         <div>
-                            <label id="currentScore" for="score" class="form-label" style="margin-top: 30px;">Score</label>
-                            <input type="range" class="form-range" id="score" min="1" max="11" step="1"
-                                oninput="this.previousElementSibling.innerHTML = 'Score - ' + this.value">
+                            <label for="ballspeed" class="form-label">Ball Speed</label>
+                            <input type="range" class="form-range" id="ballspeed" min="5" max="40" step="1">
                         </div>
+                        <div>
+                            <label for="playerspeed" class="form-label">Paddle Speed</label>
+                            <input type="range" class="form-range" id="playerspeed" min="5" max="60" step="1">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="scoreSlider" class="pb-3">Score To Win: <span id="scoreDisplay">5</span></label>
+                        <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" min="1" max="10"
+                            value="5" oninput="document.getElementById('scoreDisplay').innerText = this.value">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-dark-orange" data-bs-dismiss="modal"
-                    onclick="applyConfiguration()">Confirm</button>
+                <button id="applyConfigButton" type="button" class="btn btn-secondary btn-dark-orange"
+                    data-bs-dismiss="modal">Confirm</button>
             </div>
         </div>
     </div>
@@ -240,44 +231,13 @@
             </div>
             <div class="modal-body">
                 <form id="playerNamesForm">
-                    <div class="mb-3" id="player1Div">
-                        <label for="player1" class="form-label">Player 1</label>
-                        <input type="text" class="form-control" id="player1" required pattern="[a-zA-Z0-9_]+"
-                            maxlength="20">
-                        <div class="invalid-feedback">
-                            Player 1 name must be between 1 and 20 characters, alphanumeric, or underscores.
-                        </div>
-                    </div>
-                    <div class="mb-3" id="player2Div">
-                        <label for="player2" class="form-label">Player 2</label>
-                        <input type="text" class="form-control" id="player2" required pattern="[a-zA-Z0-9_]+"
-                            maxlength="20">
-                        <div class="invalid-feedback">
-                            Player 2 name must be between 1 and 20 characters, alphanumeric, or underscores.
-                        </div>
-                    </div>
-                    <div class="mb-3" id="player3Div" style="display: none;">
-                        <label for="player3" class="form-label">Player 3</label>
-                        <input type="text" class="form-control" id="player3" required pattern="[a-zA-Z0-9_]+"
-                            maxlength="20">
-                        <div class="invalid-feedback">
-                            Player 3 name must be between 1 and 20 characters, alphanumeric, or underscores.
-                        </div>
-                    </div>
-                    <div class="mb-3" id="player4Div" style="display: none;">
-                        <label for="player4" class="form-label">Player 4</label>
-                        <input type="text" class="form-control" id="player4" required pattern="[a-zA-Z0-9_]+"
-                            maxlength="20">
-                        <div class="invalid-feedback">
-                            Player 4 name must be between 1 and 20 characters, alphanumeric, or underscores.
-                        </div>
-                    </div>
+                    <!-- Form input elements will be generated dynamically -->
                 </form>
             </div>
             <div class="modal-footer">
                 <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
                     data-bs-dismiss="modal">Cancel</a>
-                <button type="button" class="btn btn-primary" id="startGameButton">Start</button>
+                <button type="submit" class="btn btn-accent" form="playerNamesForm">Start</button>
             </div>
         </div>
     </div>

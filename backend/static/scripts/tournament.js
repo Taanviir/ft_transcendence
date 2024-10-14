@@ -1,71 +1,122 @@
-// tournament.js - code for PONG tournament
+// tournament.js
 
-function registerPlayers(players) {
-    console.log('Players registered:', players);
-}
+export class Tournament {
+    constructor(players) {
+        this.players = players;
+        this.pong = new Pong(2, true, this.winnerCallback);
 
-function updateTournamentTable(players) {
-    const tableBody = document.getElementById('tournament-body');
-    tableBody.innerHTML = ''; // Clear existing table content
+        if (this.players.length == 3)
+            this.playerArray = this.getUniqueRandomPlayers3();
+        else
+            this.playerArray = this.getUniqueRandomPlayers4();
 
-    let matchNumber = 1;
-
-    for (let i = 0; i < players.length; i += 2) {
-        const row = document.createElement('tr');
-
-        // Player 1 and Player 2
-        const player1 = players[i];
-        const player2 = players[i + 1] || "Bye"; // Handle case where there's an odd number of players
-
-        // Match row elements
-        const matchCell = document.createElement('td');
-        matchCell.textContent = matchNumber++;
-
-        const player1Cell = document.createElement('td');
-        player1Cell.textContent = player1;
-
-        const player2Cell = document.createElement('td');
-        player2Cell.textContent = player2;
-
-        const winnerCell = document.createElement('td');
-        winnerCell.textContent = ''; // Initially, no winner is selected
-
-        // Append cells to row
-        row.appendChild(matchCell);
-        row.appendChild(player1Cell);
-        row.appendChild(player2Cell);
-        row.appendChild(winnerCell);
-
-        // Append row to table body
-        tableBody.appendChild(row);
+        this.keyboardEventHandlerBind = this.handleKeyboardEvent.bind(this);
+        this.currentPlayer1 = this.players[this.playerArray[0]];
+        this.currentPlayer2 = this.players[this.playerArray[1]];
+        this.winner = "";
+        this.isFinalGame = false;
+        this.semiFinalWinner1 = "";
+        this.semiFinalWinner2 = "";
     }
-}
 
-function tournamentInit() {
-    // select tournament settings (difficulty and score to win)
-    const tournamentModal = new bootstrap.Modal('#tournamentModal');
-    tournamentModal.show();
+    winnerCallback = (winner) => {
+        var element = document.getElementById('winnerT');
+        var elementFinal = document.getElementById('winnerF');
+        if (winner == 'left') {
+            element.innerText = this.currentPlayer1 + " Player wins!";
+            elementFinal.innerText = this.currentPlayer1 + " won the Tournament!";
+            this.winner = this.currentPlayer1;
+        }
+        else {
+            element.innerText = this.currentPlayer2 + " Player wins!";
+            elementFinal.innerText = this.currentPlayer2 + " won the Tournament!";
+            this.winner = this.currentPlayer2;
+        }
+        if (this.players.length == 4) {
+            if (this.semiFinalWinner1 == "")
+                this.semiFinalWinner1 = this.winner;
+            else
+                this.semiFinalWinner2 = this.winner;
+        }
+        if (this.isFinalGame == true) {
+            var myModal = new bootstrap.Modal('#winnerFinalpopup');
+            myModal.show();
+        }
+        else {
+            var myModal = new bootstrap.Modal('#winnerTpopup');
+            myModal.show();
+        }
+    }
 
-    const tournamentForm = document.getElementById('tournament-form');
-    tournamentForm.addEventListener('submit', (event) => {
-        event.preventDefault();
+    getUniqueRandomPlayers3() {
+        const numbers = [0, 1, 2];
+        return this.shuffleArray(numbers);
+    }
 
-        tournamentForm.classList.remove('was-validated');
+    getUniqueRandomPlayers4() {
+        const numbers = [0, 1, 2, 3];
+        return this.shuffleArray(numbers);
+    }
 
-        const alias1 = document.getElementById('alias1').value.trim();
-        const alias2 = document.getElementById('alias2').value.trim();
-        const alias3 = document.getElementById('alias3').value.trim();
-        const alias4 = document.getElementById('alias4').value.trim();
+    shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return (array);
+    }
 
-        const players = [alias1, alias2, alias3, alias4];
+    startTournament() {
+        this.displayGameAnnouncement("Semi Final", this.players[this.playerArray[0]], this.players[this.playerArray[1]]);
+        document.addEventListener('keydown', this.keyboardEventHandlerBind);
+    }
 
-        tournamentForm.classList.add('was-validated');
+    resetTournament() {
+        document.removeEventListener('keydown', this.keyboardEventHandlerBind);
+        this.pong.stop();
+    }
 
-        registerPlayers(players);
+    nextMatch() {
+        if (this.players.length == 4) {
+            if (this.semiFinalWinner1 == this.winner && this.semiFinalWinner2 == "") {
+                this.currentPlayer1 = this.players[this.playerArray[2]];
+                this.currentPlayer2 = this.players[this.playerArray[3]];
+                this.displayGameAnnouncement("Semi Final", this.players[this.playerArray[2]], this.players[this.playerArray[3]]);
+            }
+            if (this.semiFinalWinner2 == this.winner) {
+                this.displayGameAnnouncement("Final", this.semiFinalWinner1, this.semiFinalWinner2);
+                this.currentPlayer1 = this.semiFinalWinner1;
+                this.currentPlayer2 = this.semiFinalWinner2;
+                this.isFinalGame = true;
+            }
+        }
+        else {
+            this.displayGameAnnouncement("Final", this.winner, this.players[this.playerArray[2]]);
+            this.isFinalGame = true;
+        }
+        document.addEventListener('keydown', this.keyboardEventHandlerBind);
+    }
 
-        updateTournamentTable(players);
+    handleKeyboardEvent(event) {
+        if (event.key === 'Enter') {
+            document.removeEventListener('keydown', this.keyboardEventHandlerBind);
+            this.pong.start();
+        }
+    }
 
-        tournamentModal.hide();
-        document.getElementById('tournament').style.display = 'block';
-    });
+    displayGameAnnouncement(gameType, firstPlayerName, secondPlayerName) {
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'red';
+        ctx.font = "50px 'Press Start 2P'";
+
+        var textWidth = ctx.measureText(gameType).width;
+        ctx.fillText(gameType, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 200);
+        ctx.font = "50px 'Press Start 2P'";
+        textWidth = ctx.measureText(firstPlayerName + " X " + secondPlayerName).width;
+        ctx.fillText(firstPlayerName + " X " + secondPlayerName, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 50);
+        ctx.font = "50px 'Press Start 2P'";
+        textWidth = ctx.measureText("Press Enter to Start").width;
+        ctx.fillText("Press Enter to Start", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + 100);
+    }
 }

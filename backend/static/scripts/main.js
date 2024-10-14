@@ -1,4 +1,7 @@
-// main.js: contains routing logic and SPA loading
+// main.js
+
+import gameInit from './pongInit.js'
+import tournamentInit from './tournamentInit.js'
 
 const initFunctions = {
     '/pong': gameInit,
@@ -45,10 +48,7 @@ function handleSpaLinkEvent(target) {
     const method = target.getAttribute('data-method');
     const url = target.getAttribute('href');
     const formSelector = target.getAttribute('data-form');
-    const onNavigation = target.getAttribute('on-spa-navigate');
 
-    if (onNavigation != null)
-        eval(onNavigation);
     if (method === 'GET')
         getPage(url);
     else if (method === 'POST' && formSelector)
@@ -74,7 +74,7 @@ function updateContent(pageHtml, url) {
         initFunctions[urlWithoutParam]();
 }
 
-function getPage(url) {
+export function getPage(url) {
     fetch(url)
         .then(response => {
             if (!response.ok)

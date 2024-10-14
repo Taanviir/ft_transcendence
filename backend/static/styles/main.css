@@ -438,10 +438,6 @@ header {
     background-color: var(--background);
 }
 
-#tournamentModal>.form-label {
-    margin: none;
-}
-
 #tournamentModal .dropdown-toggle {
     color: var(--text);
     text-align: left;
