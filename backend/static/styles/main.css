@@ -3,37 +3,38 @@
 /* ---------------------------------- Font ---------------------------------- */
 @font-face {
     font-family: 'Press Start 2P';
-    src: url('../fonts/PressStart2P-Regular.ttf') format("truetype");
+    src: url('../fonts/PressStart2P-Regular.ttf');
 }
 
 @font-face {
     font-family: 'Silkscreen';
-    src: url('../fonts/Silkscreen-Regular.ttf') format("truetype");
+    src: url('../fonts/Silkscreen-Regular.ttf');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Silkscreen';
-    src: url('../fonts/Silkscreen-Bold.ttf') format("truetype");
+    src: url('../fonts/Silkscreen-Bold.ttf');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'Pixellari';
-    src: url('../fonts/Pixellari.ttf') format("truetype");
+    font-family: 'Pixel-Sans-Serif';
+    src: url('../fonts/Pixel-Sans-Serif.ttf');
 }
 
-.pixellari {
-    font-family: 'Pixellari', sans-serif;
+@font-face {
+    font-family: 'Pixel-Sans-Serif-Condensed';
+    src: url('../fonts/Pixel-Sans-Serif-Condensed.ttf');
 }
 
-.silk {
+.silkscreen {
     font-family: 'Silkscreen', sans-serif;
 }
 
-.silk-heavy {
+.silkscreen-heavy {
     font-family: 'Silkscreen', sans-serif;
     font-weight: bold;
 }
