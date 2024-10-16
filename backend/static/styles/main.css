@@ -70,6 +70,10 @@ li::marker {
     content: none;
 }
 
+#helpModal p {
+    font-family: 'Pixel-Sans-Serif', sans-serif;
+}
+
 #helpModal ul li {
     margin-bottom: 0.1rem;
 }
@@ -81,6 +85,10 @@ li::marker {
 kbd {
     font-family: 'Press Start 2P', sans-serif;
     border-radius: 10px;
+    border: solid #777 5px;
+    color: #777;
+    background-color: transparent;
+    padding: 15px;
 }
 
 #helpModal kbd {
@@ -155,6 +163,7 @@ header {
     margin-left: -0.5rem;
 }
 
+/* TODO */
 @media (max-width: 991.98px) {
     #navbarMenu {
         transition: height 0.3s ease-in-out, opacity 0.1s ease-in-out;
@@ -178,8 +187,7 @@ header {
 }
 
 .logo:hover {
-    transform: scale(1.2);
-    filter: drop-shadow(0 0 5px rgba(243, 156, 18, 0.8)) drop-shadow(0 0 10px rgba(243, 156, 18, 0.5));
+    transform: scale(1.1);
 }
 
 /* ---------------------------------- Home ---------------------------------- */
@@ -398,7 +406,7 @@ header {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* -------------------------------- Button -------------------------------- */
+/* ------------------------------- Button --------------------------------- */
 .btn {
     transition: transform 0.2s ease;
 }
@@ -425,21 +433,31 @@ header {
 }
 
 /* ----------------------------- Tournament ------------------------------- */
-#tournamentModal * {
+
+/* ------------------------------- Modal ---------------------------------- */
+#tournamentModal *,
+#pauseMenuModal *,
+#playerNamesModal * {
     font-family: 'Silkscreen', sans-serif;
     font-weight: bold;
     border: none;
 }
 
-#tournamentModal .modal-content {
-    background-color: transparent;
+.form-control {
+    font-family: 'Pixel-Sans-Serif-Condensed', sans-serif;
+    font-weight: normal;
 }
 
-#tournamentModal .modal-body {
+.modal .modal-content {
     background-color: var(--background);
 }
 
-#tournamentModal .dropdown-toggle {
+.modal .modal-header,
+.modal h5 {
+    color: var(--accent);
+}
+
+.modal .dropdown-toggle {
     color: var(--text);
     text-align: left;
     border-radius: 0;
@@ -452,26 +470,31 @@ header {
     align-items: center;
 }
 
-#tournamentModal .dropdown-toggle:focus,
-#tournamentModal .dropdown-toggle:hover {
+.modal .dropdown-toggle:focus,
+.modal .dropdown-toggle:hover {
     color: var(--text);
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-#tournamentModal .dropdown-toggle:focus {
+.modal .dropdown-toggle:focus {
     border-color: none;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     outline: 0;
 }
 
-#tournamentModal .dropdown-menu {
+.modal .dropdown-menu {
     background-color: var(--background);
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     outline: 0;
 }
 
-#tournamentModal .dropdown-menu:hover,
-#tournamentModal .dropdown-menu:focus {
+.modal .dropdown-item {
+    color: var(--text);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+.modal .dropdown-menu:hover,
+.modal .dropdown-menu:focus {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     outline: 0;
 }
