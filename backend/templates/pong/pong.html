@@ -197,16 +197,40 @@
 {% include "includes/help.html" %}
 
 <!-- Player Name Modal -->
-<div id="playerNameModal" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="playerNameModalLabel" aria-hidden="true" data-bs-theme="dark">
+<div id="playerNamesModal" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="playerNamesModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header justify-content-center">
-                <h5 class="modal-title" id="playerNameModalLabel">Enter names to start</h5>
+                <h5 class="modal-title" id="playerNamesModalLabel">Enter names to start</h5>
             </div>
             <div class="modal-body">
                 <form id="playerNamesForm">
                     <!-- Form input elements will be generated dynamically -->
+                    <div id="playerNamesContainer" class="mb-4"></div>
+                    <div id="gameSettings">
+                        <h5 class="text-center mb-2">Game Settings</h5>
+                        <label for="difficultyDropdownButton">Difficulty*</label>
+                        <div class="dropdown mb-3">
+                            <!-- TODO: need to make this be required -->
+                            <!-- Dropdown will default to Medium -->
+                            <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                                id="difficultyDropdownButton">Medium</button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Easy</a></li>
+                                <li><a class="dropdown-item" href="#">Medium</a></li>
+                                <li><a class="dropdown-item" href="#">Hard</a></li>
+                                <!-- TODO: add custom setting -->
+                            </ul>
+                        </div>
+                        <div class="div">
+                            <!-- TODO: need to make this be required -->
+                            <label for="scoreSlider">Score To Win: <span id="scoreDisplay">5</span></label>
+                            <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" required min="1"
+                                max="10" value="5"
+                                oninput="document.getElementById('scoreDisplay').innerText = this.value">
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer justify-content-center">
