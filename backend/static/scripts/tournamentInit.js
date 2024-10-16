@@ -106,7 +106,7 @@ export default function tournamentInit() {
     const playerInputs = ['alias1', 'alias2', 'alias3', 'alias4'];
 
     let players = [];
-    const tournamentForm = document.getElementById('tournament-form');
+    const tournamentForm = document.getElementById('tournamentForm');
 
     handleDropdown();
     handleScoreSlider();

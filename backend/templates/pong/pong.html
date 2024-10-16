@@ -89,24 +89,9 @@
     </div>
 </div>
 
-<!-- Visual Imp Mode Modal -->
-<div id="visualmodal" class="modal fade" data-bs-theme="dark" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title" id="staticBackdropLabel">Warning!</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>This mode can only be chosen before the game begins!</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Modal Winner Pop-up-->
 <div id="winnerpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -128,7 +113,7 @@
 
 <!-- Modal Tounament Winner Pop-up-->
 <div id="winnerTpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -138,9 +123,9 @@
                 <h2 id="winnerT"></h2>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-dark-orange" data-bs-dismiss="modal"
-                    onclick="nextGame()">Next Match!</button>
-                <button type="button" class="btn btn-secondary btn-dark-orange">Back to Home Page</button>
+                <button type="button" class="btn btn-dark-orange" data-bs-dismiss="modal" onclick="nextGame()">Next
+                    Match!</button>
+                <button type="button" class="btn btn-dark-orange">Back to Home Page</button>
             </div>
         </div>
     </div>
@@ -152,21 +137,21 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="background-color: #fec66b;">
             <div class="modal-header">
-                <h1 class="modal-title handjet-font" id="staticBackdropLabel">Pong Game</h1>
+                <h1 class="modal-title" id="staticBackdropLabel">Pong Game</h1>
             </div>
             <div class="modal-body">
-                <h2 id="winnerF" class="handjet-font"></h2>
+                <h2 id="winnerF"></h2>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-dark-orange">Back to Home Page</button>
+                <button type="button" class="btn btn-dark-orange">Back to Home Page</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal Config (level and sound)-->
-<div id="configModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
+<!-- Game Settings Modal -->
+<div id="gameSettingsModal" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header justify-content-center">
@@ -175,23 +160,18 @@
             <div class="modal-body">
                 <form>
                     <!-- Mode (level) button -->
-                    <div class="col">
-                        <label for="difficultyDropdown">Difficulty*</label>
-                        <div class="dropdown">
-                            <!-- Dropdown will default to Medium -->
-                            <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
-                                id="difficultyDropdown">
-                                Medium
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Easy</a></li>
-                                <li><a class="dropdown-item" href="#">Medium</a></li>
-                                <li><a class="dropdown-item" href="#">Hard</a></li>
-                                <li><a class="dropdown-item" href="#">Custom</a></li>
-                            </ul>
-                        </div>
+                    <label for="difficultyDropdownButton">Difficulty*</label>
+                    <div class="dropdown">
+                        <!-- Dropdown will default to Medium -->
+                        <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                            id="difficultyDropdownButton">Medium</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Easy</a></li>
+                            <li><a class="dropdown-item" href="#">Medium</a></li>
+                            <li><a class="dropdown-item" href="#">Hard</a></li>
+                            <li><a class="dropdown-item" href="#">Custom</a></li>
+                        </ul>
                     </div>
-
                     <!-- Custom Configuration (hidden by default) -->
                     <div id="customConfig" class="mb-3 mt-4" style="display: none;">
                         <div>
@@ -203,16 +183,11 @@
                             <input type="range" class="form-range" id="playerspeed" min="5" max="60" step="1">
                         </div>
                     </div>
-
-                    <div>
-                        <label for="scoreSlider" class="pb-3">Score To Win: <span id="scoreDisplay">5</span></label>
-                        <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" min="1" max="10"
-                            value="5" oninput="document.getElementById('scoreDisplay').innerText = this.value">
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button id="applyConfigButton" type="button" class="btn btn-secondary btn-dark-orange"
+                <button id="backToPauseMenuFromSettings" type="button" class="btn btn-secondary">Back</button>
+                <button id="applyConfigButton" type="button" class="btn btn-dark-orange"
                     data-bs-dismiss="modal">Confirm</button>
             </div>
         </div>
@@ -234,10 +209,54 @@
                     <!-- Form input elements will be generated dynamically -->
                 </form>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer justify-content-center">
                 <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
                     data-bs-dismiss="modal">Cancel</a>
                 <button type="submit" class="btn btn-accent" form="playerNamesForm">Start</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quit Confirmation Modal -->
+<div id="quitConfirmationModal" class="modal" tabindex="-1" aria-labelledby="quitConfirmationLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quitConfirmationLabel">Confirm Quit</h5>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to quit? Your game progress will not be saved.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button id="confirmQuitButton" type="button" class="btn btn-danger">Quit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pause Menu Modal -->
+<div id="pauseMenuModal" class="modal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="pauseMenuLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title" id="pauseMenuLabel">Pause Menu</h5>
+            </div>
+            <div class="modal-body text-center">
+                <div class="border">
+                    <button id="resumeGameButton" type="button" class="pause-btn">Resume Game</button>
+                </div>
+                <div class="">
+                    <button id="settingsButton" type="button" class="pause-btn">Game Settings</button>
+                </div>
+                <div class="">
+                    <button id="helpButton" type="button" class="pause-btn">Help</button>
+                </div>
+                <div class="">
+                    <button id="backToHomeButton" type="button" class="pause-btn">Quit</button>
+                </div>
             </div>
         </div>
     </div>

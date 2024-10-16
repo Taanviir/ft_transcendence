@@ -70,13 +70,11 @@
                         <h5 class="text-center mb-2">Game Settings</h5>
                         <div class="row align-items-center">
                             <div class="col">
-                                <label for="difficultyDropdown">Difficulty*</label>
+                                <label for="difficultyDropdownButton">Difficulty*</label>
                                 <div class="dropdown">
                                     <!-- Dropdown will default to Medium -->
                                     <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
-                                        id="difficultyDropdown">
-                                        Medium
-                                    </button>
+                                        id="difficultyDropdownButton">Medium</button>
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="#">Easy</a></li>
                                         <li><a class="dropdown-item" href="#">Medium</a></li>
@@ -99,7 +97,7 @@
                 <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
                     data-bs-dismiss="modal">Cancel</a>
                 <button id="registerTournament" type="submit" class="btn btn-accent"
-                    form="tournament-form">Register</button>
+                    form="tournamentForm">Register</button>
             </div>
         </div>
     </div>

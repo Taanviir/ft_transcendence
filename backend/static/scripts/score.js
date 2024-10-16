@@ -16,11 +16,11 @@ export class Score {
 
     checkGameOver() { return (this.scoreL === SCORE_TO_WIN || this.scoreR === SCORE_TO_WIN); }
 
-    drawScore() {
-        this.ctx.fillStyle = 'white';
-        this.ctx.font = "72px 'Press Start 2P'";
-        this.ctx.fillText(this.scoreL, this.canvas.width / 4, 100); // Left player score
-        this.ctx.fillText(this.scoreR, 3 * this.canvas.width / 4, 100); // Right player score
+    drawScore(color) {
+        this.ctx.fillStyle = color;
+        this.ctx.font = "36px 'Press Start 2P'";
+        this.ctx.fillText(this.scoreL, this.canvas.width / 4, 75); // Left player score
+        this.ctx.fillText(this.scoreR, 3 * this.canvas.width / 4, 75); // Right player score
     }
 
     resetScore() {

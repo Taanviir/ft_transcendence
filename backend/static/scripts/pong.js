@@ -72,6 +72,8 @@ export class Game {
 
         const handleEnter = (event) => {
             if (event.key === 'Enter') {
+                event.preventDefault();
+
                 this.countdown();
                 document.removeEventListener('keydown', handleEnter);
             }
@@ -109,20 +111,31 @@ export class Game {
     }
 
     resume() {
-        this.ball.resumeBallMovement();
-        this.intervalId = setInterval(this.gameLoop.bind(this), 1000 / 60);
-        this.isGameRunning = true;
+        if (!this.isGameRunning) {
+            this.intervalId = setInterval(this.gameLoop.bind(this), 1000 / 60);
+            this.ball.resumeBallMovement();
+            this.isGameRunning = true;
+        }
     }
 
     reset() {
         this.pause();
         this.score.resetScore();
+        this.ball.ballResetPosition();
+        this.paddles.forEach(paddle => paddle.resetPosition());
         this.count = 3;
     }
 
     playAgain() {
         this.reset();
         this.start();
+    }
+
+    stop() {
+        clearInterval(this.intervalId);
+        document.removeEventListener('keydown', this.handleKeyboardEvent.bind(this));
+        document.removeEventListener('keyup', this.handleKeyboardEvent.bind(this));
+        this.isGameRunning = false;
     }
 
     gameLoop() {
@@ -134,13 +147,6 @@ export class Game {
             this.displayWinner();
             this.stop();
         }
-    }
-
-    stop() {
-        clearInterval(this.intervalId);
-        document.removeEventListener('keydown', this.handleKeyboardEvent.bind(this));
-        document.removeEventListener('keyup', this.handleKeyboardEvent.bind(this));
-        this.isGameRunning = false;
     }
 
     handleKeyboardEvent(event) {
@@ -167,16 +173,15 @@ export class Game {
     render() {
         this.drawBackground();
         this.drawGameBoard();
-
         this.paddles.forEach(paddle => paddle.drawPaddle(this.paddleColor));
-
-        this.score.drawScore();
+        this.score.drawScore(this.ballColor);
         this.ball.draw(this.ballColor);
     }
 
     toggleVisualMode() {
         this.visualMode = this.visualMode === 'default' ? 'visualImpaired' : 'default';
         this.applyVisualMode(this.visualMode);
+        this.drawBackground();
     }
 
     applyVisualMode(mode) {
@@ -197,8 +202,6 @@ export class Game {
             eyeButton.classList.remove('fa-eye');
             eyeButton.classList.add('fa-eye-slash');
         }
-
-        // this.render();
     }
 
     drawStartScreen() {
@@ -272,13 +275,11 @@ export class Game {
             audio.muted = this.isMuted;
 
         if (this.isMuted) {
-            console.log('muted');
             muteButton.classList.remove('fa-volume-up');
             muteButton.classList.add('fa-volume-mute');
             muteButton.setAttribute('title', 'Unmute Sound');
         }
         else {
-            console.log('unmuted');
             muteButton.classList.remove('fa-volume-mute');
             muteButton.classList.add('fa-volume-up');
             muteButton.setAttribute('title', 'Mute Sound');

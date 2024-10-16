@@ -2,6 +2,8 @@
 
 import { PADDLE_SPEED as DEFAULT_PADDLE_SPEED } from './pong.js';
 
+//TODO: implement paddle height
+
 export const PaddleTypes = Object.freeze({
     LEFT1: 'LEFT_PLAYER_1',
     RIGHT1: 'RIGHT_PLAYER_1',

@@ -1,7 +1,8 @@
 // pong-init.js
 
-import { Game, BALL_SPEED, PADDLE_SPEED } from './pong.js';
+import { Game } from './pong.js';
 import { getPage } from './main.js';
+import pauseMenu from './pauseMenu.js';
 
 export default function gameInit() {
     const usernameElement = document.querySelector('meta[name="username"]');
@@ -52,7 +53,8 @@ export default function gameInit() {
         console.log('Tournament mode selected');
 }
 
-function generatePlayerNamesForm(playerNamesForm, playerInputs) {
+function generatePlayerNamesForm(playerInputs) {
+    const playerNamesForm = document.getElementById('playerNamesContainer');
     playerNamesForm.innerHTML = '';
 
     // Create fields depending on visibility
@@ -67,16 +69,17 @@ function generatePlayerNamesForm(playerNamesForm, playerInputs) {
             const label = document.createElement('label');
             label.htmlFor = inputId;
             label.className = 'form-label';
-            label.textContent = `${inputId.charAt(0).toUpperCase() + inputId.slice(1, -1)} ${inputId.at(-1)}*`;
+            label.textContent = `${inputId.slice(0, -6)} ${inputId.slice(6,-5)}*`;
 
             // Create the input field
             const input = document.createElement('input');
             input.type = 'text';
-            input.className = 'form-control';
             input.id = inputId;
+            input.className = 'form-control';
             input.required = true;
             input.pattern = '[a-zA-Z0-9_]+';
             input.maxLength = 20;
+            input.placeholder = 'Enter your name here';
 
             // Append elements to the div
             playerDiv.appendChild(label);
@@ -97,12 +100,12 @@ function generatePlayerNamesForm(playerNamesForm, playerInputs) {
 }
 
 function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
-    const playerNameModal = new bootstrap.Modal('#playerNameModal');
+    const playerNamesModal = new bootstrap.Modal('#playerNamesModal');
     const playerInputs = [
-        { divId: 'player1Div', inputId: 'player1', visible: !isLoggedIn },
-        { divId: 'player2Div', inputId: 'player2', visible: true },
-        { divId: 'player3Div', inputId: 'player3', visible: numOfPlayers === 4 },
-        { divId: 'player4Div', inputId: 'player4', visible: numOfPlayers === 4 },
+        { divId: 'player1Div', inputId: 'player1Input', visible: !isLoggedIn },
+        { divId: 'player2Div', inputId: 'player2Input', visible: true },
+        { divId: 'player3Div', inputId: 'player3Input', visible: numOfPlayers === 4 },
+        { divId: 'player4Div', inputId: 'player4Input', visible: numOfPlayers === 4 },
     ];
 
     let players = [];
@@ -110,9 +113,9 @@ function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
         players.push(loggedInUsername);
 
     const playerNamesForm = document.getElementById('playerNamesForm');
-    generatePlayerNamesForm(playerNamesForm, playerInputs);
+    generatePlayerNamesForm(playerInputs);
 
-    playerNameModal.show();
+    playerNamesModal.show();
 
     playerNamesForm.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -124,59 +127,17 @@ function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
             }
         });
 
-        playerNameModal.hide();
+        playerNamesModal.hide();
 
-        document.getElementById('player1name').innerText = players[0].length > 5 ? players[0].slice(0, 5) + '.' : players[0];
-        document.getElementById('player2name').innerText = players[1].length > 5 ? players[1].slice(0, 5) + '.' : players[1];
-        if (playerNames.length === 4) {
-            document.getElementById('player3name').innerText = players[2].length > 5 ? players[2].slice(0, 5) + '.' : players[2];
-            document.getElementById('player4name').innerText = players[3].length > 5 ? players[3].slice(0, 5) + '.' : players[3];
-        }
-
-        launchGame(playerNames);
-    });
-}
-
-function setupConfigModalDropdown() {
-    const modal = document.getElementById('configModal');
-    const dropdownMenu = modal.querySelector('.dropdown-menu');
-
-    const gameConfig = {
-        "Easy": { paddleSpeed: 15, ballSpeed: 7 },
-        "Medium": { paddleSpeed: 30, ballSpeed: 15 },
-        "Hard": { paddleSpeed: 66, ballSpeed: 33 },
-    };
-
-    dropdownMenu.addEventListener('click', (event) => {
-        const selectedItem = event.target.closest('.dropdown-item');
-        if (selectedItem) {
-            event.preventDefault();
-
-            const selectedText = selectedItem.textContent.trim();
-            const dropdownButton = modal.querySelector('.dropdown-toggle');
-            dropdownButton.textContent = selectedText;
-
-            if (selectedText in gameConfig) {
-                PADDLE_SPEED = gameConfig[selectedText].paddleSpeed;
-                BALL_SPEED = gameConfig[selectedText].ballSpeed;
-            }
-            else if (selectedText === "Custom")
-                document.getElementById("customConfig").style.display = "block";
-            else
-                console.error('Invalid difficulty level selected');
-
-            const dropdown = new bootstrap.Dropdown(dropdownButton);
-            dropdown.hide();
-        }
+        launchGame(players);
     });
 }
 
 function launchGame(players, isTournament = false) {
     const canvas = document.getElementById('pongGame');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
     const game = new Game(canvas, players, isTournament);
+
+    window.addEventListener('popstate', () => game.stop());
 
     document.fonts.load('10pt "Press Start 2P"')
         .then(() => {
@@ -184,17 +145,19 @@ function launchGame(players, isTournament = false) {
         })
         .then(() => {
             game.init();
-            setupConfigModalDropdown();
             document.getElementById("pongContainer").style.display = "flex";
 
+            document.getElementById('player1name').innerText = players[0].length > 5 ? players[0].slice(0, 5) + '.' : players[0];
+            document.getElementById('player2name').innerText = players[1].length > 5 ? players[1].slice(0, 5) + '.' : players[1];
+            if (players.length === 4) {
+                document.getElementById('player3name').innerText = players[2].length > 5 ? players[2].slice(0, 5) + '.' : players[2];
+                document.getElementById('player4name').innerText = players[3].length > 5 ? players[3].slice(0, 5) + '.' : players[3];
+            }
+
             document.getElementById('visualModeButton').addEventListener('click', () => game.toggleVisualMode());
-            document.getElementById('helpButton').addEventListener('click', () => game.pause());
-            document.getElementById('helpCloseButton').addEventListener('click', () => game.resume());
-            document.getElementById('homeButton').addEventListener('click', () => game.reset());
-            document.getElementById('playAgainButton').addEventListener('click', () => game.playAgain());
-            document.getElementById('configButton').addEventListener('click', () => game.loadConfiguration());
-            document.getElementById('applyConfigButton').addEventListener('click', () => game.applyConfiguration());
             document.getElementById('muteButton').addEventListener('click', game.toggleMute);
+            document.getElementById('playAgainButton').addEventListener('click', () => game.playAgain());
+            document.getElementById('pauseMenuButton').addEventListener('click', () => pauseMenu(game));
         })
         .catch(error => {
             console.error("Error loading font:", error);
