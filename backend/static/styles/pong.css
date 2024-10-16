@@ -1,13 +1,13 @@
-#gradbackground {
-    background-color: #d9800b;
-    /* For browsers that do not support gradients */
-    background-image: linear-gradient(0deg, #d9800b, #f5de2f);
+/* pong.css */
+
+.btn-dark-orange {
+    background-color: #e9a108f3;
+    border-color: #e9a108f3;
+    color: rgb(12, 12, 12);
 }
 
-.canvas-container {
-    width: 100%;
+#pongContainer {
     height: 100%;
-    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -22,50 +22,4 @@ canvas {
     justify-content: space-evenly;
     align-items: center;
     flex-direction: column;
-}
-
-
-.handjet-font {
-    font-family: "Handjet", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: medium;
-    font-variation-settings:
-        "ELGR" 1,
-        "ELSH" 2;
-}
-
-.chakra-petch-regular {
-    font-family: "Chakra Petch", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-}
-
-.switch-container {
-    display: flex;
-    align-items: center;
-}
-
-.switch-label {
-    margin-right: 10px;
-    /* Adjust spacing between label and switch */
-}
-
-.press-start-2p-regular {
-    font-family: "Press Start 2P", system-ui;
-    font-weight: 400;
-    font-style: normal;
-}
-
-.press-start-2p-regular-conf {
-    font-family: "Press Start 2P", system-ui;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 25px;
-}
-
-.btn-dark-orange {
-    background-color: #e9a108f3; /* Dark orange */
-    border-color: #e9a108f3;
-    color: rgb(12, 12, 12);
 }

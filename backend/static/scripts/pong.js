@@ -240,6 +240,8 @@ export class Game {
     displayWinner() {
         const winnerElement = document.getElementById('winner');
 
+        //TODO: update this to show player names
+
         console.log(this.players);
 
         if (this.score.scoreL === SCORE_TO_WIN)

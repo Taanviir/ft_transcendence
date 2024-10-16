@@ -135,6 +135,10 @@ function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
 
 function launchGame(players, isTournament = false) {
     const canvas = document.getElementById('pongGame');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+
     const game = new Game(canvas, players, isTournament);
 
     window.addEventListener('popstate', () => game.stop());
