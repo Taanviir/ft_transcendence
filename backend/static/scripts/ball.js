@@ -2,6 +2,8 @@
 
 import { BALL_SPEED } from './pong.js';
 
+//TODO: fix collision issues
+
 export class Ball {
     constructor(canvas, ctx, score, paddles, ballRadius) {
         this.canvas = canvas;

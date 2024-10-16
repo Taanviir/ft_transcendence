@@ -62,12 +62,12 @@ function updateContent(pageHtml, url) {
     const newContent = page.querySelector('#content').innerHTML;
     document.querySelector('#content').innerHTML = newContent;
 
-    const newTitle = page.querySelector('title').innerHTML;
-    document.title = newTitle;
-
     const oldUrl = document.location.pathname;
     if (oldUrl !== url)
         history.pushState(null, '', url);
+
+    const newTitle = page.querySelector('title').innerHTML;
+    document.title = newTitle;
 
     const urlWithoutParam = url.split('?')[0];
     if (initFunctions[urlWithoutParam])
