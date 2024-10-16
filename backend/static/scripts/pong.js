@@ -182,6 +182,8 @@ export class Game {
         this.visualMode = this.visualMode === 'default' ? 'visualImpaired' : 'default';
         this.applyVisualMode(this.visualMode);
         this.drawBackground();
+        if (!this.isGameRunning)
+            this.drawStartScreen();
     }
 
     applyVisualMode(mode) {

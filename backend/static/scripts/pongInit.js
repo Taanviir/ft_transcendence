@@ -69,7 +69,7 @@ function generatePlayerNamesForm(playerInputs) {
             const label = document.createElement('label');
             label.htmlFor = inputId;
             label.className = 'form-label';
-            label.textContent = `${inputId.slice(0, -6)} ${inputId.slice(6,-5)}*`;
+            label.textContent = `${inputId.slice(0, -6)} ${inputId.slice(6, -5)}*`;
 
             // Create the input field
             const input = document.createElement('input');
