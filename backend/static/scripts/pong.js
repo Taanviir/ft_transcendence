@@ -74,6 +74,8 @@ export class Game {
             if (event.key === 'Enter') {
                 event.preventDefault();
 
+                // document.getElementById('titleOverlay').style.display = 'none';
+                // document.getElementById('startOverlay').style.display = 'none';
                 this.countdown();
                 document.removeEventListener('keydown', handleEnter);
             }

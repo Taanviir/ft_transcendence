@@ -135,13 +135,32 @@ function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
 
 function launchGame(players, isTournament = false) {
     const canvas = document.getElementById('pongGame');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
 
+    function resizeCanvas(game = null) {
+        const aspectRatio = 16 / 9;
 
+        let width = Math.min(window.innerWidth, 1280);
+        let height = Math.min(window.innerHeight, 720);
+
+        if (width / height > aspectRatio)
+            width = height * aspectRatio;
+        else
+            height = width / aspectRatio;
+
+        if (canvas.width !== width || canvas.height !== height) {
+            canvas.width = width;
+            canvas.height = height;
+
+            if (game)
+                game.drawBackground();
+        }
+    }
+
+    resizeCanvas();
     const game = new Game(canvas, players, isTournament);
 
     window.addEventListener('popstate', () => game.stop());
+    window.addEventListener('resize', () => resizeCanvas(game));
 
     document.fonts.load('10pt "Press Start 2P"')
         .then(() => {
