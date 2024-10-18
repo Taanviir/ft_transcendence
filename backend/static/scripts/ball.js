@@ -14,8 +14,7 @@ export class Ball {
         this.ballY = this.canvas.height / 2;
         this.dx = 0;
         this.dy = 0;
-        this.angleX = 0.0;
-        this.angleY = 0.0;
+        this.angle = 0.0;
         this.ballRadius = ballRadius;
 
         this.paddles = paddles;
@@ -34,8 +33,8 @@ export class Ball {
 
     updateSpeed(newSpeed) {
         if (newSpeed > 0) {
-            this.dx = this.angleX * newSpeed;
-            this.dy = this.angleY * newSpeed;
+			this.dx = Math.cos(this.angle) * newSpeed;
+			this.dy = Math.sin(this.angle) * newSpeed;
         }
         else
             console.error('Invalid speed value:', newSpeed);
@@ -49,14 +48,8 @@ export class Ball {
         this.ctx.closePath();
     }
 
-    ballStartAngle() {
-        let min = -0.5;
-        let max = 0.5;
-        let angle = Math.random() * (max - min) + min;
-        if (angle < 0.15 && angle > -0.15) {
-            angle = 0.15;
-        }
-        return angle;
+    ballRandomSign() {
+        return Math.random() > 0.5 ? -1:1;
     }
 
     ballResetPosition() {
@@ -65,16 +58,15 @@ export class Ball {
     }
 
     startBallMovement() {
-        this.angleX = this.ballStartAngle();
-        this.angleY = this.ballStartAngle();
-        this.dx = this.angleX * BALL_SPEED;
-        this.dy = this.angleY * BALL_SPEED;
+        this.angle = Math.random();
+        this.dx = Math.cos(this.angle) * BALL_SPEED * this.ballRandomSign();
+        this.dy = Math.sin(this.angle) * BALL_SPEED * this.ballRandomSign();
         this.ballMoving = true;
     }
 
     resumeBallMovement() {
-        this.dx = this.angleX * BALL_SPEED;
-        this.dy = this.angleY * BALL_SPEED;
+        this.dx = Math.cos(this.angle) * BALL_SPEED;
+        this.dy = Math.sin(this.angle) * BALL_SPEED;
         this.ballMoving = true;
     }
 

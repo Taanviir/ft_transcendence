@@ -5,7 +5,7 @@ import { PaddleTypes, Paddle } from './paddle.js';
 import { Score } from './score.js';
 import { Tournament } from './tournament.js';
 
-export let BALL_SPEED = 15;
+export let BALL_SPEED = 10;
 export let PADDLE_SPEED = 10;
 export let SCORE_TO_WIN = 5;
 
