@@ -16,17 +16,11 @@
 <div id="tournament" class="container" style="display: none;">
     <h1>Tournament</h1>
     <table class="table table-bordered" id="tournament-table">
-        <thead>
-            <tr>
-                <th>Match #</th>
-                <th>Player 1</th>
-                <th>Player 2</th>
-                <th>Winner</th>
-            </tr>
-        </thead>
-        <tbody id="tournament-body">
-            <!-- Matches will be inserted here dynamically -->
-        </tbody>
+        <tr>PRELIMINARY</tr>
+        <tr id="match1"></tr>
+        <tr id="match2"></tr>
+        <tr>FINAL</tr>
+        <tr id="matchFinal"></tr>
     </table>
 </div>
 
@@ -39,7 +33,7 @@
                 <h1 class="modal-title" id="tournamentModalLabel">Tournament Registration</h1>
             </div>
             <div class="modal-body">
-                <form id="tournament-form" class="tournament-form">
+                <form id="tournamentForm" class="tournament-form">
                     <div id="playerAliases" class="mb-4">
                         <div class="row mb-2">
                             <div class="col">

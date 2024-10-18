@@ -64,8 +64,23 @@ export default function pauseMenu(game) {
 
     // Quit game and go back to home
     const quitButton = document.getElementById('backToHomeButton');
-    quitButton.removeEventListener('click', showQuitConfirmation(game));
-    quitButton.addEventListener('click', showQuitConfirmation(game));
+    quitButton.removeEventListener('click', showQuitConfirmation());
+    quitButton.addEventListener('click', showQuitConfirmation());
+
+    function showQuitConfirmation() {
+        const quitConfirmationModal = new bootstrap.Modal('#quitConfirmationModal');
+        pauseMenuModal.hide();
+        quitConfirmationModal.show();
+
+        const confirmQuitButton = document.getElementById('confirmQuitButton');
+        confirmQuitButton.addEventListener('click', confirmQuit);
+
+        function confirmQuit() {
+            quitConfirmationModal.hide();
+            game.stop();
+            getPage('/'); // Redirect to home page
+        }
+    }
 }
 
 function setupGameSettingsModalDropdown() {
@@ -100,20 +115,4 @@ function setupGameSettingsModalDropdown() {
             dropdown.hide();
         }
     });
-}
-
-// TODO add this to when user uses the back button to go to home
-function showQuitConfirmation(game) {
-    const quitConfirmationModal = new bootstrap.Modal('#quitConfirmationModal');
-    pauseMenuModal.hide();
-    quitConfirmationModal.show();
-
-    const confirmQuitButton = document.getElementById('confirmQuitButton');
-    confirmQuitButton.addEventListener('click', confirmQuit);
-
-    function confirmQuit() {
-        game.stop();
-        getPage('/'); // Redirect to home page
-        quitConfirmationModal.hide();
-    }
 }
