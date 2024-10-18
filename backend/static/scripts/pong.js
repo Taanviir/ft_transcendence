@@ -7,11 +7,10 @@ const gameConfig = {
     "Easy": { paddleSpeed: 15, ballSpeed: 7 },
     "Medium": { paddleSpeed: 30, ballSpeed: 15 },
     "Hard": { paddleSpeed: 66, ballSpeed: 33 },
-    "Visual Impaired": { paddleSpeed: 15, ballSpeed: 10 }
 };
 
 var g_PADDLE_SPEED = 10;
-var g_BALL_SPEED = 15;
+var g_BALL_SPEED = 10;
 var g_SOUND = true;
 var g_SCORE_TO_WIN = 5;
 var g_CURRENT_LEVEL = "Medium";
@@ -46,8 +45,7 @@ class Ball {
 		g_ballRadius = this.ballRadius;
 		this.score = score;
 		this.sound = new Sound("../static/sound/bounce.mp3");
-		this.angleX = 0.0;
-		this.angleY = 0.0;
+		this.angle = 0.0;
 	}
 
 	drawBall() {
@@ -58,33 +56,26 @@ class Ball {
 		ctx.closePath();
 	}
 
-	ballStartAngle() {
-		var min = -0.5;
-		var max = 0.5;
-		var angle = Math.random() * (max - min) + min;
-		if (angle < 0.15 && angle > -0.15) {
-			angle = 0.15;
-		}
-		return angle;
-	}
-
-	ballResetPosition() {
-		this.ballX = this.width / 2;
-		this.ballY = this.height / 2;
+	ballRandomSign() {
+		return Math.random() > 0.5 ? -1 : 1;
 	}
 
 	startBallMovement() {
-		this.angleX = this.ballStartAngle();
-		this.angleY = this.ballStartAngle();
-		this.dx = this.angleX * g_BALL_SPEED; // Initialize dx based on random angle
-		this.dy = this.angleY * g_BALL_SPEED; // Initialize dy based on random angle
-		this.ballMoving = true; // Set flag to true to start movement
-	}
+        this.angle = Math.random();
+        this.dx = Math.cos(this.angle) * g_BALL_SPEED * this.ballRandomSign();
+        this.dy = Math.sin(this.angle) * g_BALL_SPEED * this.ballRandomSign();
+        this.ballMoving = true;
+    }
+
+    ballResetPosition() {
+        this.ballX = this.width / 2;
+        this.ballY = this.height / 2;
+    }
 
 	resumeBallMovement() {
-		this.dx = this.angleX * g_BALL_SPEED; // Update the speed
-		this.dy = this.angleY * g_BALL_SPEED; // Update the speed
-		this.ballMoving = true;
+		this.dx = Math.cos(this.angle) * g_BALL_SPEED;
+        this.dy = Math.sin(this.angle) * g_BALL_SPEED;
+        this.ballMoving = true;
 	}
 
 	doLinesIntersect(line1, line2) {
@@ -624,7 +615,7 @@ class Pong {
 		else {
 			element.innerText = "Right Player wins!";
 		}
-		var myModal = new bootstrap.Modal(document.getElementById('winnerpopup'));
+		var myModal = new bootstrap.Modal('#winnerpopup');
 		myModal.show();
 	}
 
@@ -918,11 +909,11 @@ class Tournament {
 			}
 		}
 		if (this.isFinalGame == true) {
-			var myModal = new bootstrap.Modal(document.getElementById('winnerFinalpopup'));
+			var myModal = new bootstrap.Modal('#winnerFinalpopup');
 			myModal.show();
 		}
 		else {
-			var myModal = new bootstrap.Modal(document.getElementById('winnerTpopup'));
+			var myModal = new bootstrap.Modal('#winnerTpopup');
 			myModal.show();
 		}
 	}
@@ -1035,7 +1026,7 @@ function setupDropdownListeners() {
 
 function visual() {
     if (game.isGameRunning() == true) {
-        var myModal = new bootstrap.Modal(document.getElementById('visualmodal'));
+        var myModal = new bootstrap.Modal('#visualmodal');
         myModal.show();
         return;
     }
@@ -1060,7 +1051,7 @@ function visual() {
 
 function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
     let playerNames = [];
-    const playerNameModal = new bootstrap.Modal(document.getElementById('playerNameModal'));
+    const playerNameModal = new bootstrap.Modal('#playerNameModal');
     const playerForm = document.getElementById('playerNamesForm');
 
     const playerInputs = [
@@ -1089,8 +1080,10 @@ function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
         playerInputs.forEach(({ inputId, visible }) => {
             if (visible) {
                 const inputField = document.getElementById(inputId);
-                if (inputField.checkValidity())
+                if (inputField.checkValidity()) {
                     inputField.classList.remove('is-invalid');
+                    inputField.classList.add('is-valid');
+                }
                 else {
                     allValid = false;
                     inputField.classList.add('is-invalid');
@@ -1130,6 +1123,7 @@ function startGame(playerNames, isTournament = false) {
     canvas.height = window.innerHeight;
 
     game = new Game(isTournament, playerNames);
+    window.addEventListener('popstate', () => game.pong.stop());
 
     document.fonts.load('10pt "Press Start 2P"')
         .then(() => {
@@ -1140,7 +1134,6 @@ function startGame(playerNames, isTournament = false) {
             setupDropdownListeners();
 
             document.getElementById("pongContainer").style.display = "flex";
-            console.log("player names:", playerNames); // TODO: remove
         })
         .catch(error => {
             console.error("Error loading font:", error);
@@ -1165,17 +1158,16 @@ function gameInit() {
         { mode: '1v1', loggedIn: true, players: 2 },
         { mode: '2v2', loggedIn: true, players: 4 },
         { mode: 'guest', loggedIn: false, players: 2 },
-        { mode: 'tournament', loggedIn: true, players: 2 },
+        { mode: 'tournament', loggedIn: true },
     ];
 
-    // Find the game mode object based on the 'mode' parameter
     const selectedMode = gameModes.find(gameMode => gameMode.mode === mode);
     if (!selectedMode) {
         alert('Invalid mode selected');
+        getPage('/');
         return;
     }
 
-    // Check if the login status matches the selected mode's requirement
     const isLoggedIn = (loggedInUsername !== null);
     if (selectedMode.loggedIn && !isLoggedIn) {
         alert('You must be logged in to access this mode');
@@ -1191,5 +1183,5 @@ function gameInit() {
     else if (selectedMode.mode === 'guest')
         askForPlayerNames(selectedMode.players, false);
     else if (selectedMode.mode === 'tournament')
-        console.log('Tournament mode selected');
+        tournamentInit();
 }
