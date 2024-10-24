@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.db.models import Q
 
 from .friendship import Friendship
+from .match import Match
 
 
 class CustomUser(AbstractUser):
@@ -67,4 +68,21 @@ class CustomUser(AbstractUser):
 
     def get_all_matches(self):
         """Retrieve all matches for this user."""
-        return self.matches.all()  # Access matches through the related name
+        return Match.objects.filter(Q(user=self) | Q(opponent1=self.username))
+
+    def update_stats(self):
+        """Update the win/loss stats for this user based on match history."""
+        wins = Match.objects.filter(user=self, result=Match.MatchResult.WIN).count()
+        losses = Match.objects.filter(user=self, result=Match.MatchResult.LOSS).count()
+        self.wins = wins
+        self.losses = losses
+        self.save()
+
+    def create_match(self, opponent1, result=Match.MatchResult.LOSS):
+        """Create a new match with the specified opponent."""
+        if self.username == opponent1:
+            raise ValueError("A user cannot play a match against themselves.")
+        match = Match(user=self, opponent1=opponent1, result=result)
+        match.save()
+        self.update_stats()
+        return match
