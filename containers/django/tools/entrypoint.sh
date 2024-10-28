@@ -2,7 +2,7 @@
 
 black .
 
-python3 pong-backend/manage.py makemigrations
+python3 pong-backend/manage.py makemigrations users game
 
 python3 pong-backend/manage.py migrate
 
