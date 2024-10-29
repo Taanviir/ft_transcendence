@@ -9,13 +9,12 @@ from .match import Match
 
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=20, unique=True)
+    original_username = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(
-        error_messages={"unique": "A user with that email already exists."},
         blank=True,
         max_length=254,
-        verbose_name="Email Address*",
-        null=False,
-        unique=True,
+        verbose_name="Email Address",
+        null=True,
     )
     profile_image = models.ImageField(
         upload_to="profile_images/", blank=True, null=True

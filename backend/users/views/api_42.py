@@ -46,6 +46,15 @@ def exchange_access_token(code):
     return responseJSON.get("access_token") if responseJSON else None
 
 
+def generate_unique_username(username_42):
+    username = username_42
+    counter = 1
+    while CustomUser.objects.filter(username=username).exists():
+        username = f"{username_42}{counter}"
+        counter += 1
+    return username
+
+
 def login_or_create_42(access_token):
     url = "https://api.intra.42.fr/v2/me"
     headers = {"Authorization": f"Bearer {access_token}"}
@@ -54,19 +63,34 @@ def login_or_create_42(access_token):
     if user_data is None:
         return None
 
-    user, created = CustomUser.objects.get_or_create(
-        username=user_data.get("login"),
+    base_username = user_data.get("login")
+
+    user = CustomUser.objects.filter(username=base_username, is_42=True).first()
+    if user:
+        user.last_login = timezone.now()
+        user.save()
+        return user
+
+    user = CustomUser.objects.filter(
+        original_username=base_username, is_42=True
+    ).first()
+    if user:
+        user.last_login = timezone.now()
+        user.save()
+        return user
+
+    unique_username = generate_unique_username(base_username)
+    user = CustomUser(
+        username=unique_username,
+        original_username=base_username,  # Storing the original name from API
         email=user_data.get("email"),
         first_name=user_data.get("first_name"),
         last_name=user_data.get("last_name"),
+        is_42=True,
+        last_login=timezone.now(),
     )
-
-    if created:
-        user.is_42 = True
-        user.set_unusable_password()
-        user.last_login = timezone.now()
-        user.save()
-
+    user.set_unusable_password()
+    user.save()
     return user
 
 

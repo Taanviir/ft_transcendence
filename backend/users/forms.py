@@ -24,14 +24,6 @@ class CustomUserCreationForm(UserCreationForm):
             )
         return username
 
-    def clean_email(self):
-        email = self.cleaned_data.get("email")
-        if not email:
-            raise forms.ValidationError("Email field cannot be empty.")
-        if get_user_model().objects.filter(email=email).exists():
-            raise forms.ValidationError("A user with that email already exists.")
-        return email
-
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
